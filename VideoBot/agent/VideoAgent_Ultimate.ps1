@@ -687,6 +687,11 @@ function Invoke-EnhancedVideoProcessing {
     
     Write-UltimateLog "Starting enhanced AI video processing for: $(Split-Path $InputPath -Leaf)" "INFO" "ENHANCED"
     
+    # 初始化成本监控
+    if($Global:CFG.AI.EnableCostMonitoring -and $Global:DeepSeekClient) {
+        Start-DeepSeekCostMonitoring
+    }
+    
     try {
         # 1. 基础视频处理
         $BasicResult = Invoke-UltimateVideoProcessing $InputPath $PresetName
@@ -793,6 +798,7 @@ function Invoke-EnhancedVideoProcessing {
             }
             analysis_result = $analysisResult
             basic_stats = $BasicResult.Stats
+            cost_report = if($Global:DeepSeekCostTracker) { Get-DeepSeekCostReport } else { $null }
         }
         
         # 保存增强统计
@@ -800,6 +806,12 @@ function Invoke-EnhancedVideoProcessing {
         $enhancedStats | ConvertTo-Json -Compress | Add-Content -Path $enhancedStatsFile -Encoding UTF8
         
         Write-UltimateLog "Enhanced AI video processing completed in $($processingTime.TotalMinutes.ToString('F1')) minutes" "SUCCESS" "ENHANCED"
+        
+        # 显示成本报告
+        if($Global:DeepSeekCostTracker) {
+            $costReport = Get-DeepSeekCostReport
+            Write-UltimateLog "AI Processing Cost: `$$($costReport.SessionUsage.ToString('F4')) (Daily: `$$($costReport.DailyUsage.ToString('F4')))" "INFO" "COST"
+        }
         
         return @{
             Success = $true
@@ -839,6 +851,147 @@ function Convert-SRTToPlainText {
     }
     
     return $textLines -join " "
+}
+
+# DeepSeek成本监控和优化
+function Start-DeepSeekCostMonitoring {
+    Write-UltimateLog "Initializing DeepSeek cost monitoring..." "INFO" "COST"
+    
+    $Global:DeepSeekCostTracker = @{
+        DailyUsage = 0.0
+        SessionUsage = 0.0
+        APICallCount = 0
+        StartTime = Get-Date
+        DailyLimit = if($Global:DeepSeekConfig) { $Global:DeepSeekConfig.deepseek.cost_limits.daily_limit_usd } else { 10.0 }
+        WarningThreshold = if($Global:DeepSeekConfig) { $Global:DeepSeekConfig.deepseek.cost_limits.warning_threshold_usd } else { 0.8 }
+    }
+    
+    # 加载今日使用记录
+    $costLogPath = Join-Path $Global:CFG.LOG ("deepseek_cost_" + (Get-Date -Format "yyyyMMdd") + ".json")
+    if(Test-Path $costLogPath) {
+        try {
+            $todayCosts = Get-Content $costLogPath -Raw | ConvertFrom-Json
+            $Global:DeepSeekCostTracker.DailyUsage = $todayCosts.total_cost
+            $Global:DeepSeekCostTracker.APICallCount = $todayCosts.api_calls
+            Write-UltimateLog "Loaded daily usage: `$$($Global:DeepSeekCostTracker.DailyUsage.ToString('F4'))" "INFO" "COST"
+        } catch {
+            Write-UltimateLog "Failed to load cost history: $($_.Exception.Message)" "WARN" "COST"
+        }
+    }
+}
+
+function Add-DeepSeekCostRecord {
+    param(
+        [double]$Cost,
+        [string]$Operation,
+        [hashtable]$Details = @{}
+    )
+    
+    if(-not $Global:DeepSeekCostTracker) {
+        Start-DeepSeekCostMonitoring
+    }
+    
+    $Global:DeepSeekCostTracker.SessionUsage += $Cost
+    $Global:DeepSeekCostTracker.DailyUsage += $Cost
+    $Global:DeepSeekCostTracker.APICallCount++
+    
+    # 记录详细成本信息
+    $costRecord = @{
+        timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        operation = $Operation
+        cost = $Cost
+        session_total = $Global:DeepSeekCostTracker.SessionUsage
+        daily_total = $Global:DeepSeekCostTracker.DailyUsage
+        details = $Details
+    }
+    
+    # 保存到日志
+    $costLogPath = Join-Path $Global:CFG.LOG ("deepseek_cost_" + (Get-Date -Format "yyyyMMdd") + ".jsonl")
+    $costRecord | ConvertTo-Json -Compress | Add-Content -Path $costLogPath -Encoding UTF8
+    
+    # 检查成本限制
+    $dailyLimitPercent = ($Global:DeepSeekCostTracker.DailyUsage / $Global:DeepSeekCostTracker.DailyLimit) * 100
+    
+    if($dailyLimitPercent -ge 100) {
+        Write-UltimateLog "⚠️ COST ALERT: Daily limit exceeded! ($($Global:DeepSeekCostTracker.DailyUsage.ToString('F4'))/$($Global:DeepSeekCostTracker.DailyLimit))" "ERROR" "COST"
+        return $false
+    } elseif($dailyLimitPercent -ge ($Global:DeepSeekCostTracker.WarningThreshold * 100)) {
+        Write-UltimateLog "⚠️ COST WARNING: $($dailyLimitPercent.ToString('F1'))% of daily limit used" "WARN" "COST"
+    }
+    
+    Write-UltimateLog "$Operation cost: `$$($Cost.ToString('F4')) (Daily: `$$($Global:DeepSeekCostTracker.DailyUsage.ToString('F4')))" "INFO" "COST"
+    return $true
+}
+
+function Get-DeepSeekCostReport {
+    if(-not $Global:DeepSeekCostTracker) {
+        return @{ Error = "Cost tracking not initialized" }
+    }
+    
+    $sessionTime = (Get-Date) - $Global:DeepSeekCostTracker.StartTime
+    $avgCostPerCall = if($Global:DeepSeekCostTracker.APICallCount -gt 0) { 
+        $Global:DeepSeekCostTracker.SessionUsage / $Global:DeepSeekCostTracker.APICallCount 
+    } else { 0 }
+    
+    return @{
+        DailyUsage = $Global:DeepSeekCostTracker.DailyUsage
+        SessionUsage = $Global:DeepSeekCostTracker.SessionUsage
+        APICallCount = $Global:DeepSeekCostTracker.APICallCount
+        SessionDuration = $sessionTime.TotalMinutes
+        AverageCostPerCall = $avgCostPerCall
+        DailyLimit = $Global:DeepSeekCostTracker.DailyLimit
+        DailyLimitPercent = ($Global:DeepSeekCostTracker.DailyUsage / $Global:DeepSeekCostTracker.DailyLimit) * 100
+        EstimatedMonthlyCost = $Global:DeepSeekCostTracker.DailyUsage * 30
+    }
+}
+
+function Optimize-DeepSeekUsage {
+    param(
+        [string]$Text,
+        [string]$Operation
+    )
+    
+    # 智能文本分块，避免超长请求
+    $maxChunkSize = switch($Operation) {
+        "content_analysis" { 3000 }  # 内容分析允许更长文本
+        "marketing" { 2000 }         # 营销文案适中
+        "seo" { 1500 }              # SEO关键词相对简短
+        "subtitle_optimization" { 4000 }  # 字幕优化需要完整上下文
+        default { 2000 }
+    }
+    
+    if($Text.Length -le $maxChunkSize) {
+        return @($Text)
+    }
+    
+    # 智能分块策略
+    $chunks = @()
+    $sentences = $Text -split '[.!?。！？]'
+    $currentChunk = ""
+    
+    foreach($sentence in $sentences) {
+        $sentence = $sentence.Trim()
+        if([string]::IsNullOrWhiteSpace($sentence)) { continue }
+        
+        if(($currentChunk.Length + $sentence.Length) -le $maxChunkSize) {
+            $currentChunk += "$sentence. "
+        } else {
+            if($currentChunk.Length -gt 0) {
+                $chunks += $currentChunk.Trim()
+                $currentChunk = "$sentence. "
+            } else {
+                # 单个句子过长，强制分块
+                $chunks += $sentence.Substring(0, [Math]::Min($maxChunkSize, $sentence.Length))
+            }
+        }
+    }
+    
+    if($currentChunk.Length -gt 0) {
+        $chunks += $currentChunk.Trim()
+    }
+    
+    Write-UltimateLog "Optimized text into $($chunks.Count) chunks for $Operation" "INFO" "OPTIMIZE"
+    return $chunks
 }
 
 # Web界面生成器
