@@ -54,7 +54,13 @@
                             },
                "Language":  "auto",
                "Model":  "whisper-1",
-               "AddSubs":  true
+               "AddSubs":  true,
+               "Provider":  "deepseek",
+               "EnableContentAnalysis":  true,
+               "EnableMarketingGeneration":  true,
+               "EnableSEOOptimization":  true,
+               "EnableSubtitleOptimization":  true,
+               "EnableCostMonitoring":  true
            },
     "OUT":  "C:\\VideoBot\\out",
     "WEB_CONFIG":  {

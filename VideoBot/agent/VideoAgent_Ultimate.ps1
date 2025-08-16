@@ -37,6 +37,12 @@ $Global:CFG = @{
         Model       = 'whisper-1'
         Language    = 'auto'
         AddSubs     = $true
+        Provider    = 'deepseek'
+        EnableContentAnalysis = $true
+        EnableMarketingGeneration = $true
+        EnableSEOOptimization = $true
+        EnableSubtitleOptimization = $true
+        EnableCostMonitoring = $true
         SubStyle    = @{
             FontName = 'Microsoft YaHei'
             FontSize = 24
@@ -59,6 +65,50 @@ $Global:CFG = @{
         EnableStats     = $true
         ReportInterval  = 3600  # 1小时
         KeepDays       = 30
+    }
+}
+
+# 导入DeepSeek模块
+$DeepSeekModulePath = Join-Path $PSScriptRoot "..\modules\DeepSeek.ps1"
+if(Test-Path $DeepSeekModulePath) {
+    . $DeepSeekModulePath
+} else {
+    Write-Warning "DeepSeek module not found at: $DeepSeekModulePath"
+}
+
+# 全局变量
+$Global:DeepSeekClient = $null
+$Global:DeepSeekConfig = $null
+
+# 加载DeepSeek配置
+function Initialize-DeepSeekConfiguration {
+    $configPath = Join-Path $Global:CFG.CONFIG "deepseek-config.json"
+    if(Test-Path $configPath) {
+        try {
+            $Global:DeepSeekConfig = Get-Content $configPath -Raw | ConvertFrom-Json
+            Write-UltimateLog "DeepSeek configuration loaded successfully" "SUCCESS" "DEEPSEEK"
+        } catch {
+            Write-UltimateLog "Failed to load DeepSeek configuration: $($_.Exception.Message)" "ERROR" "DEEPSEEK"
+        }
+    } else {
+        Write-UltimateLog "DeepSeek configuration file not found: $configPath" "WARN" "DEEPSEEK"
+    }
+}
+
+# 初始化DeepSeek客户端
+function Initialize-DeepSeekClient {
+    if([string]::IsNullOrWhiteSpace($env:DEEPSEEK_API_KEY)) {
+        Write-UltimateLog "DEEPSEEK_API_KEY not configured, skipping DeepSeek initialization" "WARN" "DEEPSEEK"
+        return $false
+    }
+    
+    try {
+        $Global:DeepSeekClient = [DeepSeekClient]::new($env:DEEPSEEK_API_KEY)
+        Write-UltimateLog "DeepSeek client initialized successfully" "SUCCESS" "DEEPSEEK"
+        return $true
+    } catch {
+        Write-UltimateLog "Failed to initialize DeepSeek client: $($_.Exception.Message)" "ERROR" "DEEPSEEK"
+        return $false
     }
 }
 
@@ -219,6 +269,66 @@ function Test-UltimateEnvironment {
         Write-UltimateLog "Disk space: $FreeSpaceGB GB available" "SUCCESS" "DOCTOR"
     }
     
+    # 检查DeepSeek配置
+    Write-UltimateLog "Checking DeepSeek AI integration..." "INFO" "DOCTOR"
+    
+    # 检查DeepSeek网络连接
+    try {
+        $DeepSeekConnection = Test-NetConnection -ComputerName "api.deepseek.com" -Port 443 -WarningAction SilentlyContinue
+        if($DeepSeekConnection.TcpTestSucceeded) {
+            Write-UltimateLog "DeepSeek API connectivity: OK" "SUCCESS" "DOCTOR"
+        } else {
+            Write-UltimateLog "Cannot reach DeepSeek API - network may be restricted" "WARN" "DOCTOR"
+        }
+    } catch {
+        Write-UltimateLog "DeepSeek network connectivity test failed" "WARN" "DOCTOR"
+    }
+    
+    # 检查DeepSeek API Key
+    if([string]::IsNullOrWhiteSpace($env:DEEPSEEK_API_KEY)) {
+        Write-UltimateLog "DeepSeek API Key not configured" "WARN" "DOCTOR"
+        
+        # 智能DeepSeek API Key设置
+        $DeepSeekKeyPath = Join-Path $Global:CFG.CONFIG "deepseek_api_key.txt"
+        if(Test-Path $DeepSeekKeyPath) {
+            $SavedDeepSeekKey = Get-Content $DeepSeekKeyPath -Raw
+            $env:DEEPSEEK_API_KEY = $SavedDeepSeekKey.Trim()
+            Write-UltimateLog "Loaded saved DeepSeek API key" "SUCCESS" "DOCTOR"
+        } else {
+            Write-Host "`n🤖 DeepSeek API Key Setup (Optional)" -ForegroundColor Green
+            Write-Host "DeepSeek provides 95% cost savings compared to OpenAI" -ForegroundColor Cyan
+            Write-Host "Enter your DeepSeek API Key (press Enter to skip):" -ForegroundColor Cyan
+            $DeepSeekKey = Read-Host -AsSecureString "DeepSeek API Key"
+            $PlainDeepSeekKey = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DeepSeekKey))
+            
+            if(-not [string]::IsNullOrWhiteSpace($PlainDeepSeekKey)) {
+                $env:DEEPSEEK_API_KEY = $PlainDeepSeekKey
+                $PlainDeepSeekKey | Out-File -FilePath $DeepSeekKeyPath -Encoding UTF8
+                Write-UltimateLog "DeepSeek API Key configured and saved" "SUCCESS" "DOCTOR"
+            } else {
+                Write-UltimateLog "DeepSeek API Key skipped - enhanced AI features disabled" "WARN" "DOCTOR"
+            }
+        }
+    } else {
+        Write-UltimateLog "DeepSeek API Key configured" "SUCCESS" "DOCTOR"
+    }
+    
+    # 检查DeepSeek配置文件
+    $DeepSeekConfigPath = Join-Path $Global:CFG.CONFIG "deepseek-config.json"
+    if(Test-Path $DeepSeekConfigPath) {
+        Write-UltimateLog "DeepSeek configuration file found" "SUCCESS" "DOCTOR"
+    } else {
+        Write-UltimateLog "DeepSeek configuration file missing - using defaults" "WARN" "DOCTOR"
+    }
+    
+    # 检查DeepSeek模块
+    $DeepSeekModulePath = Join-Path $PSScriptRoot "..\modules\DeepSeek.ps1"
+    if(Test-Path $DeepSeekModulePath) {
+        Write-UltimateLog "DeepSeek module found" "SUCCESS" "DOCTOR"
+    } else {
+        Write-UltimateLog "DeepSeek module missing - enhanced AI features unavailable" "WARN" "DOCTOR"
+    }
+    
     if($Issues.Count -gt 0) {
         Write-UltimateLog "Environment issues detected:" "WARN" "DOCTOR"
         $Issues | ForEach-Object { Write-UltimateLog "  - $_" "WARN" "DOCTOR" }
@@ -279,7 +389,7 @@ function Get-EnhancedVideoInfo {
     }
 }
 
-# AI转录和字幕生成
+# AI转录和字幕生成 - 增强版支持DeepSeek和OpenAI
 function Invoke-AITranscription {
     param(
         [string]$VideoPath,
@@ -288,8 +398,12 @@ function Invoke-AITranscription {
     
     Write-UltimateLog "Starting AI transcription for: $(Split-Path $VideoPath -Leaf)" "INFO" "AI"
     
-    if([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) {
-        Write-UltimateLog "OpenAI API key not configured, skipping transcription" "WARN" "AI"
+    # 检查配置的AI提供商
+    $useDeepSeek = ($Global:CFG.AI.Provider -eq "deepseek") -and ($Global:DeepSeekClient -ne $null)
+    $useOpenAI = -not $useDeepSeek -and (-not [string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY))
+    
+    if(-not $useDeepSeek -and -not $useOpenAI) {
+        Write-UltimateLog "No AI provider configured, skipping transcription" "WARN" "AI"
         return $null
     }
     
@@ -305,7 +419,7 @@ function Invoke-AITranscription {
             throw "Audio extraction failed"
         }
         
-        # 检查音频文件大小（OpenAI限制25MB）
+        # 检查音频文件大小
         $AudioSize = (Get-Item $AudioFile).Length
         if($AudioSize -gt 25MB) {
             Write-UltimateLog "Audio file too large, compressing..." "WARN" "AI"
@@ -319,55 +433,78 @@ function Invoke-AITranscription {
             }
         }
         
-        # 调用OpenAI Whisper API
-        Write-UltimateLog "Calling OpenAI Whisper API..." "INFO" "AI"
+        $response = $null
         
-        $AudioBytes = [System.IO.File]::ReadAllBytes($AudioFile)
-        $Boundary = [System.Guid]::NewGuid().ToString()
-        
-        $Headers = @{
-            "Authorization" = "Bearer $env:OPENAI_API_KEY"
-            "Content-Type" = "multipart/form-data; boundary=$Boundary"
+        if($useDeepSeek) {
+            # 使用DeepSeek API
+            Write-UltimateLog "Calling DeepSeek Whisper API..." "INFO" "AI"
+            try {
+                $options = @{
+                    language = if($Language -ne "auto") { $Language } else { $null }
+                }
+                $response = $Global:DeepSeekClient.AudioTranscription($AudioFile, $options)
+                Write-UltimateLog "DeepSeek transcription completed successfully" "SUCCESS" "AI"
+            } catch {
+                Write-UltimateLog "DeepSeek transcription failed: $($_.Exception.Message)" "ERROR" "AI"
+                if($Global:CFG.AI.Provider -eq "deepseek" -and $Global:DeepSeekConfig.integration.fallback_to_openai) {
+                    Write-UltimateLog "Falling back to OpenAI..." "WARN" "AI"
+                    $useOpenAI = $true
+                    $useDeepSeek = $false
+                }
+            }
         }
         
-        # 构建multipart请求体
-        $BodyStart = "--$Boundary`r`n" +
-                    "Content-Disposition: form-data; name=`"file`"; filename=`"audio.wav`"`r`n" +
-                    "Content-Type: audio/wav`r`n`r`n"
-        
-        $BodyEnd = "`r`n--$Boundary`r`n" +
-                  "Content-Disposition: form-data; name=`"model`"`r`n`r`n" +
-                  "$($Global:CFG.AI.Model)`r`n" +
-                  "--$Boundary`r`n" +
-                  "Content-Disposition: form-data; name=`"response_format`"`r`n`r`n" +
-                  "srt`r`n"
-        
-        if($Language -ne "auto") {
-            $BodyEnd += "--$Boundary`r`n" +
-                       "Content-Disposition: form-data; name=`"language`"`r`n`r`n" +
-                       "$Language`r`n"
+        if($useOpenAI -and $response -eq $null) {
+            # 使用OpenAI API作为后备
+            Write-UltimateLog "Calling OpenAI Whisper API..." "INFO" "AI"
+            
+            $AudioBytes = [System.IO.File]::ReadAllBytes($AudioFile)
+            $Boundary = [System.Guid]::NewGuid().ToString()
+            
+            $Headers = @{
+                "Authorization" = "Bearer $env:OPENAI_API_KEY"
+                "Content-Type" = "multipart/form-data; boundary=$Boundary"
+            }
+            
+            # 构建multipart请求体
+            $BodyStart = "--$Boundary`r`n" +
+                        "Content-Disposition: form-data; name=`"file`"; filename=`"audio.wav`"`r`n" +
+                        "Content-Type: audio/wav`r`n`r`n"
+            
+            $BodyEnd = "`r`n--$Boundary`r`n" +
+                      "Content-Disposition: form-data; name=`"model`"`r`n`r`n" +
+                      "$($Global:CFG.AI.Model)`r`n" +
+                      "--$Boundary`r`n" +
+                      "Content-Disposition: form-data; name=`"response_format`"`r`n`r`n" +
+                      "srt`r`n"
+            
+            if($Language -ne "auto") {
+                $BodyEnd += "--$Boundary`r`n" +
+                           "Content-Disposition: form-data; name=`"language`"`r`n`r`n" +
+                           "$Language`r`n"
+            }
+            
+            $BodyEnd += "--$Boundary--`r`n"
+            
+            $BodyStartBytes = [System.Text.Encoding]::UTF8.GetBytes($BodyStart)
+            $BodyEndBytes = [System.Text.Encoding]::UTF8.GetBytes($BodyEnd)
+            
+            # 合并请求体
+            $FullBodyLength = $BodyStartBytes.Length + $AudioBytes.Length + $BodyEndBytes.Length
+            $FullBody = New-Object byte[] $FullBodyLength
+            
+            [Array]::Copy($BodyStartBytes, 0, $FullBody, 0, $BodyStartBytes.Length)
+            [Array]::Copy($AudioBytes, 0, $FullBody, $BodyStartBytes.Length, $AudioBytes.Length)
+            [Array]::Copy($BodyEndBytes, 0, $FullBody, $BodyStartBytes.Length + $AudioBytes.Length, $BodyEndBytes.Length)
+            
+            # 发送请求
+            $response = Invoke-RestMethod -Uri "https://api.openai.com/v1/audio/transcriptions" -Method Post -Headers $Headers -Body $FullBody
+            Write-UltimateLog "OpenAI transcription completed successfully" "SUCCESS" "AI"
         }
-        
-        $BodyEnd += "--$Boundary--`r`n"
-        
-        $BodyStartBytes = [System.Text.Encoding]::UTF8.GetBytes($BodyStart)
-        $BodyEndBytes = [System.Text.Encoding]::UTF8.GetBytes($BodyEnd)
-        
-        # 合并请求体
-        $FullBodyLength = $BodyStartBytes.Length + $AudioBytes.Length + $BodyEndBytes.Length
-        $FullBody = New-Object byte[] $FullBodyLength
-        
-        [Array]::Copy($BodyStartBytes, 0, $FullBody, 0, $BodyStartBytes.Length)
-        [Array]::Copy($AudioBytes, 0, $FullBody, $BodyStartBytes.Length, $AudioBytes.Length)
-        [Array]::Copy($BodyEndBytes, 0, $FullBody, $BodyStartBytes.Length + $AudioBytes.Length, $BodyEndBytes.Length)
-        
-        # 发送请求
-        $Response = Invoke-RestMethod -Uri "https://api.openai.com/v1/audio/transcriptions" -Method Post -Headers $Headers -Body $FullBody
         
         Remove-Item $AudioFile -Force -ErrorAction SilentlyContinue
         
-        Write-UltimateLog "AI transcription completed successfully" "SUCCESS" "AI"
-        return $Response
+        return $response
         
     } catch {
         Remove-Item $AudioFile -Force -ErrorAction SilentlyContinue
@@ -535,8 +672,173 @@ function Invoke-UltimateVideoProcessing {
         return @{
             Success = $false
             Error = $_.Exception.Message
+    }
+}
+
+# 增强AI视频处理 - 包含内容分析、营销文案生成等
+function Invoke-EnhancedVideoProcessing {
+    param(
+        [string]$InputPath,
+        [string]$PresetName = "mobile"
+    )
+    
+    $StartTime = Get-Date
+    $FileName = [System.IO.Path]::GetFileNameWithoutExtension($InputPath)
+    
+    Write-UltimateLog "Starting enhanced AI video processing for: $(Split-Path $InputPath -Leaf)" "INFO" "ENHANCED"
+    
+    try {
+        # 1. 基础视频处理
+        $BasicResult = Invoke-UltimateVideoProcessing $InputPath $PresetName
+        if(-not $BasicResult.Success) {
+            throw "Basic video processing failed: $($BasicResult.Error)"
+        }
+        
+        # 2. AI转录
+        $transcriptContent = ""
+        if($Global:CFG.AI.AddSubs) {
+            Write-UltimateLog "Generating transcript..." "INFO" "ENHANCED"
+            $srtContent = Invoke-AITranscription $InputPath
+            
+            if($srtContent) {
+                $transcriptContent = Convert-SRTToPlainText $srtContent
+                $srtFile = Join-Path $Global:CFG.OUT "$FileName.srt"
+                $srtContent | Out-File -FilePath $srtFile -Encoding UTF8
+                Write-UltimateLog "Transcript saved to: $srtFile" "SUCCESS" "ENHANCED"
+            }
+        }
+        
+        # 3. AI内容分析
+        $analysisResult = $null
+        if($Global:CFG.AI.EnableContentAnalysis -and $Global:DeepSeekClient -and $transcriptContent) {
+            Write-UltimateLog "Performing AI content analysis..." "INFO" "ENHANCED"
+            $analysisResult = Invoke-DeepSeekContentAnalysis $transcriptContent $InputPath $Global:DeepSeekClient
+            
+            if($analysisResult) {
+                $analysisFile = Join-Path $Global:CFG.OUT "$FileName.analysis.json"
+                $analysisResult | ConvertTo-Json -Depth 10 | Out-File -FilePath $analysisFile -Encoding UTF8
+                Write-UltimateLog "Content analysis saved to: $analysisFile" "SUCCESS" "ENHANCED"
+            }
+        }
+        
+        # 4. 营销文案生成
+        if($Global:CFG.AI.EnableMarketingGeneration -and $Global:DeepSeekClient -and $analysisResult) {
+            Write-UltimateLog "Generating marketing content..." "INFO" "ENHANCED"
+            
+            $platforms = @("youtube", "tiktok", "bilibili", "general")
+            $marketingContent = @{}
+            
+            foreach($platform in $platforms) {
+                try {
+                    $content = New-DeepSeekMarketingContent $analysisResult $platform $Global:DeepSeekClient
+                    $marketingContent[$platform] = $content
+                } catch {
+                    Write-UltimateLog "Marketing content generation failed for $platform`: $($_.Exception.Message)" "WARN" "ENHANCED"
+                }
+            }
+            
+            if($marketingContent.Count -gt 0) {
+                $marketingFile = Join-Path $Global:CFG.OUT "$FileName.marketing.txt"
+                $marketingOutput = ""
+                foreach($platform in $marketingContent.Keys) {
+                    $marketingOutput += "=== $platform 营销文案 ===`r`n"
+                    $marketingOutput += "$($marketingContent[$platform])`r`n`r`n"
+                }
+                $marketingOutput | Out-File -FilePath $marketingFile -Encoding UTF8
+                Write-UltimateLog "Marketing content saved to: $marketingFile" "SUCCESS" "ENHANCED"
+            }
+        }
+        
+        # 5. SEO关键词生成
+        if($Global:CFG.AI.EnableSEOOptimization -and $Global:DeepSeekClient -and $analysisResult) {
+            Write-UltimateLog "Generating SEO keywords..." "INFO" "ENHANCED"
+            try {
+                $seoKeywords = New-DeepSeekSEOKeywords $analysisResult $Global:DeepSeekClient
+                $seoFile = Join-Path $Global:CFG.OUT "$FileName.keywords.txt"
+                $seoKeywords | Out-File -FilePath $seoFile -Encoding UTF8
+                Write-UltimateLog "SEO keywords saved to: $seoFile" "SUCCESS" "ENHANCED"
+            } catch {
+                Write-UltimateLog "SEO keywords generation failed: $($_.Exception.Message)" "WARN" "ENHANCED"
+            }
+        }
+        
+        # 6. 字幕优化
+        if($Global:CFG.AI.EnableSubtitleOptimization -and $Global:DeepSeekClient -and $srtContent) {
+            Write-UltimateLog "Optimizing subtitles..." "INFO" "ENHANCED"
+            try {
+                $optimizedSrt = Optimize-DeepSeekSubtitles $srtContent $Global:DeepSeekClient
+                $optimizedSrtFile = Join-Path $Global:CFG.OUT "$FileName.optimized.srt"
+                $optimizedSrt | Out-File -FilePath $optimizedSrtFile -Encoding UTF8
+                Write-UltimateLog "Optimized subtitles saved to: $optimizedSrtFile" "SUCCESS" "ENHANCED"
+            } catch {
+                Write-UltimateLog "Subtitle optimization failed: $($_.Exception.Message)" "WARN" "ENHANCED"
+            }
+        }
+        
+        # 7. 生成处理报告
+        $processingTime = (Get-Date) - $StartTime
+        $enhancedStats = @{
+            timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            user = "Quen-Tao-Lee"
+            input_file = Split-Path $InputPath -Leaf
+            output_file = Split-Path $BasicResult.OutputPath -Leaf
+            preset = $PresetName
+            processing_time = $processingTime.TotalSeconds
+            ai_features_used = @{
+                transcription = $srtContent -ne $null
+                content_analysis = $analysisResult -ne $null
+                marketing_generation = $marketingContent.Count -gt 0
+                seo_optimization = (Test-Path (Join-Path $Global:CFG.OUT "$FileName.keywords.txt"))
+                subtitle_optimization = (Test-Path (Join-Path $Global:CFG.OUT "$FileName.optimized.srt"))
+            }
+            analysis_result = $analysisResult
+            basic_stats = $BasicResult.Stats
+        }
+        
+        # 保存增强统计
+        $enhancedStatsFile = Join-Path $Global:CFG.LOG ("enhanced_stats_" + (Get-Date -Format "yyyyMM") + ".jsonl")
+        $enhancedStats | ConvertTo-Json -Compress | Add-Content -Path $enhancedStatsFile -Encoding UTF8
+        
+        Write-UltimateLog "Enhanced AI video processing completed in $($processingTime.TotalMinutes.ToString('F1')) minutes" "SUCCESS" "ENHANCED"
+        
+        return @{
+            Success = $true
+            OutputPath = $BasicResult.OutputPath
+            EnhancedStats = $enhancedStats
+            AnalysisResult = $analysisResult
+            ProcessingTime = $processingTime
+        }
+        
+    } catch {
+        Write-UltimateLog "Enhanced video processing failed: $($_.Exception.Message)" "ERROR" "ENHANCED"
+        return @{
+            Success = $false
+            Error = $_.Exception.Message
         }
     }
+}
+
+# 辅助函数：将SRT转换为纯文本
+function Convert-SRTToPlainText {
+    param([string]$SrtContent)
+    
+    $lines = $SrtContent -split "`r`n|`n"
+    $textLines = @()
+    
+    foreach($line in $lines) {
+        $line = $line.Trim()
+        # 跳过数字索引行和时间戳行
+        if($line -match '^\d+$' -or $line -match '\d{2}:\d{2}:\d{2}') {
+            continue
+        }
+        # 跳过空行
+        if([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+        $textLines += $line
+    }
+    
+    return $textLines -join " "
 }
 
 # Web界面生成器
@@ -930,9 +1232,17 @@ function Start-UltimateAgent {
                         continue
                     }
                     
-                    # 处理视频
+                    # 处理视频 - 使用增强AI处理
                     Write-UltimateLog "🎬 PROCESSING: $($VideoFile.Name)" "INFO" "MAIN"
-                    $Result = Invoke-UltimateVideoProcessing -InputPath $VideoFile.FullName -PresetName "auto"
+                    
+                    # 根据DeepSeek配置选择处理方式
+                    if($deepseekReady -and $Global:CFG.AI.EnableContentAnalysis) {
+                        Write-UltimateLog "Using enhanced AI processing with DeepSeek" "INFO" "MAIN"
+                        $Result = Invoke-EnhancedVideoProcessing -InputPath $VideoFile.FullName -PresetName "auto"
+                    } else {
+                        Write-UltimateLog "Using basic processing" "INFO" "MAIN"
+                        $Result = Invoke-UltimateVideoProcessing -InputPath $VideoFile.FullName -PresetName "auto"
+                    }
                     
                     if($Result.Success) {
                         $ProcessedCount++
@@ -987,6 +1297,16 @@ try {
 
     # 初始化配置
     Initialize-Configuration
+    
+    # 初始化DeepSeek
+    Initialize-DeepSeekConfiguration
+    $deepseekReady = Initialize-DeepSeekClient
+    
+    if($deepseekReady) {
+        Write-Host "🤖 DeepSeek AI Ready - Enhanced features enabled" -ForegroundColor Green
+    } else {
+        Write-Host "⚠️  DeepSeek not configured - Using basic features only" -ForegroundColor Yellow
+    }
     
     # 环境检查
     if(-not $SkipDoctor) {
