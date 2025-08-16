@@ -1,0 +1,69 @@
+﻿{
+    "TMP":  "C:\\VideoBot\\temp",
+    "PRESETS":  {
+                    "desktop":  {
+                                    "CRF":  20,
+                                    "W":  1920,
+                                    "Preset":  "medium",
+                                    "Desc":  "鐢佃剳妯睆",
+                                    "H":  1080
+                                },
+                    "web":  {
+                                "CRF":  25,
+                                "W":  1280,
+                                "Preset":  "fast",
+                                "Desc":  "缃戠粶浼樺寲",
+                                "H":  720
+                            },
+                    "4k":  {
+                               "CRF":  18,
+                               "W":  3840,
+                               "Preset":  "slow",
+                               "Desc":  "4K瓒呮竻",
+                               "H":  2160
+                           },
+                    "mobile":  {
+                                   "CRF":  23,
+                                   "W":  1080,
+                                   "Preset":  "medium",
+                                   "Desc":  "鎵嬫満绔栧睆",
+                                   "H":  1920
+                               },
+                    "social":  {
+                                   "CRF":  23,
+                                   "W":  1080,
+                                   "Preset":  "medium",
+                                   "Desc":  "绀句氦濯掍綋",
+                                   "H":  1080
+                               }
+                },
+    "WEB":  "C:\\VideoBot\\web",
+    "STATS":  {
+                  "EnableStats":  true,
+                  "ReportInterval":  3600,
+                  "KeepDays":  30
+              },
+    "DONE":  "C:\\VideoBot\\done",
+    "IN":  "C:\\VideoBot\\in",
+    "AI":  {
+               "SubStyle":  {
+                                "Color":  "white",
+                                "Shadow":  true,
+                                "FontSize":  24,
+                                "FontName":  "Microsoft YaHei"
+                            },
+               "Language":  "auto",
+               "Model":  "whisper-1",
+               "AddSubs":  true
+           },
+    "OUT":  "C:\\VideoBot\\out",
+    "WEB_CONFIG":  {
+                       "Port":  "8080",
+                       "Host":  "localhost",
+                       "EnableAuth":  false,
+                       "Theme":  "dark",
+                       "EnableAPI":  true
+                   },
+    "CONFIG":  "C:\\VideoBot\\config",
+    "LOG":  "C:\\VideoBot\\logs"
+}

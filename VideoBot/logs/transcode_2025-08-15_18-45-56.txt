@@ -1,0 +1,74 @@
+处理: test.mp4
+ffmpeg version 7.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers
+  built with gcc 14.2.0 (Rev1, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx --enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 --enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi --enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora --enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-librubberband
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'C:\VideoBot\in\test.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:12.50, start: 0.000000, bitrate: 5099 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], 4985 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 libx264
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, mono, fltp, 105 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+[vist#0:0/h264 @ 0000023e588e3680] [dec:h264 @ 0000023e59030e40] Using auto hwaccel type dxva2 with new default device.
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+[libx264 @ 0000023e5887d480] using SAR=1/1
+[libx264 @ 0000023e5887d480] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0000023e5887d480] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0000023e5887d480] 264 - core 164 r3204 373697b - H.264/MPEG-4 AVC codec - Copyleft 2003-2025 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=54 lookahead_threads=15 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=20.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'C:\VideoBot\out\test_1080x1920.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), nv12(tv, bt709, progressive), 1080x1920 [SAR 1:1 DAR 9:16], q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : Core Media Video
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, mono, fltp, 128 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=   22 fps=0.0 q=26.0 size=     512KiB time=00:00:00.66 bitrate=6292.0kbits/s speed=1.28x    frame=  149 fps=144 q=26.0 size=    4352KiB time=00:00:04.90 bitrate=7275.9kbits/s speed=4.75x    frame=  313 fps=203 q=26.0 size=    7424KiB time=N/A bitrate=N/A speed=N/A    [out#0/mp4 @ 0000023e58867b80] video:7500KiB audio:160KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.190690%
+frame=  375 fps=240 q=-1.0 Lsize=    7675KiB time=00:00:12.43 bitrate=5057.1kbits/s speed=7.96x    
+[libx264 @ 0000023e5887d480] frame I:3     Avg QP:14.96  size: 87000
+[libx264 @ 0000023e5887d480] frame P:141   Avg QP:19.05  size: 38083
+[libx264 @ 0000023e5887d480] frame B:231   Avg QP:21.08  size:  8870
+[libx264 @ 0000023e5887d480] consecutive B-frames:  1.1% 48.5%  5.6% 44.8%
+[libx264 @ 0000023e5887d480] mb I  I16..4: 38.1% 34.9% 27.0%
+[libx264 @ 0000023e5887d480] mb P  I16..4:  9.5% 19.6%  2.4%  P16..4: 24.0% 12.9%  6.2%  0.0%  0.0%    skip:25.5%
+[libx264 @ 0000023e5887d480] mb B  I16..4:  1.2%  2.3%  0.1%  B16..8: 14.6%  5.1%  0.6%  direct: 6.4%  skip:69.7%  L0:38.9% L1:51.0% BI:10.1%
+[libx264 @ 0000023e5887d480] 8x8 transform intra:61.1% inter:34.0%
+[libx264 @ 0000023e5887d480] coded y,uvDC,uvAC intra: 43.1% 65.0% 26.9% inter: 6.1% 17.5% 1.1%
+[libx264 @ 0000023e5887d480] i16 v,h,dc,p: 55% 30%  9%  6%
+[libx264 @ 0000023e5887d480] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 25% 33% 16%  3%  5%  5%  5%  4%  5%
+[libx264 @ 0000023e5887d480] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 27% 26% 11%  5%  7%  7%  7%  6%  5%
+[libx264 @ 0000023e5887d480] i8c dc,h,v,p: 45% 27% 17% 11%
+[libx264 @ 0000023e5887d480] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0000023e5887d480] kb/s:4914.98
+[aac @ 0000023e59268c80] Qavg: 12689.310
+成功: test.mp4

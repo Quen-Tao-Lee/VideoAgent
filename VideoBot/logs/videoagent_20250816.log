@@ -1,0 +1,75 @@
+﻿[2025-08-16 14:03:46] [INFO] [CONFIG] Initializing VideoAgent Ultimate configuration...
+[2025-08-16 14:03:46] [SUCCESS] [CONFIG] Configuration initialized successfully
+[2025-08-16 14:03:46] [INFO] [DOCTOR] Starting comprehensive environment check...
+[2025-08-16 14:03:46] [SUCCESS] [DOCTOR] FFmpeg found: 7.1.1-essentials_build-www.gyan.dev
+[2025-08-16 14:03:50] [SUCCESS] [DOCTOR] OpenAI API connectivity: OK
+[2025-08-16 14:03:50] [SUCCESS] [DOCTOR] Disk space: 54.5 GB available
+[2025-08-16 14:03:50] [SUCCESS] [DOCTOR] Environment check passed
+[2025-08-16 14:03:50] [INFO] [WEB] Initializing web interface...
+[2025-08-16 14:03:50] [SUCCESS] [WEB] Web interface created at: C:\VideoBot\web\index.html
+[2025-08-16 14:03:50] [SUCCESS] [MAIN] 馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee
+[2025-08-16 14:03:50] [INFO] [MAIN] Monitoring directory: C:\VideoBot\in
+[2025-08-16 14:03:50] [INFO] [MAIN] Web interface: http://localhost:8080
+[2025-08-16 14:03:51] [SUCCESS] [WEB] Web server started on port 8080
+[2025-08-16 14:06:06] [INFO] [MAIN] Found 1 video files in queue
+[2025-08-16 14:06:06] [INFO] [MAIN] Queued: wp.mp4
+[2025-08-16 14:06:09] [INFO] [MAIN] 馃幀 PROCESSING: wp.mp4
+[2025-08-16 14:06:10] [INFO] [PROCESSOR] Starting ultimate processing: wp.mp4
+[2025-08-16 14:06:10] [INFO] [PROCESSOR] Video analysis: 720x1280, 0.2min, portrait
+[2025-08-16 14:06:10] [INFO] [SMART] Recommended preset: social (Scene: portrait, Duration: short)
+[2025-08-16 14:06:10] [INFO] [PROCESSOR] Processing with preset: social (绀句氦濯掍綋)
+[2025-08-16 14:06:10] [DEBUG] [PROCESSOR] Command: ffmpeg -i "C:\VideoBot\in\wp.mp4" -filter_complex "scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black" -c:v libx264 -preset medium -crf 23 -c:a aac -b:a 128k -movflags +faststart "C:\VideoBot\out\wp_social.mp4" -y
+[2025-08-16 14:06:12] [SUCCESS] [PROCESSOR] Video processing completed in 0.0 minutes
+[2025-08-16 14:06:12] [SUCCESS] [PROCESSOR] Size reduction: -37.4% (2MB 鈫?2.7MB)
+[2025-08-16 14:06:12] [INFO] [PROCESSOR] Starting subtitle generation...
+[2025-08-16 14:06:12] [INFO] [AI] Starting AI transcription for: wp.mp4
+[2025-08-16 14:06:12] [INFO] [AI] Extracting audio...
+[2025-08-16 14:06:12] [INFO] [AI] Calling OpenAI Whisper API...
+[2025-08-16 14:06:14] [ERROR] [AI] AI transcription failed: 远程服务器返回错误: (401) 未经授权。
+[2025-08-16 14:06:14] [SUCCESS] [MAIN] 鉁?SUCCESS: wp.mp4 鈫?wp_social.mp4
+[2025-08-16 14:06:14] [INFO] [NOTIFICATION] Video processed successfully: wp.mp4
+[2025-08-16 14:20:00] [INFO] [HEARTBEAT] 馃挀 HEARTBEAT: Running for 0.3 hours, processed 1 videos
+[2025-08-16 14:27:44] [INFO] [CONFIG] Initializing VideoAgent Ultimate configuration...
+[2025-08-16 14:27:44] [SUCCESS] [CONFIG] Configuration initialized successfully
+[2025-08-16 14:27:44] [INFO] [DOCTOR] Starting comprehensive environment check...
+[2025-08-16 14:27:44] [SUCCESS] [DOCTOR] FFmpeg found: 7.1.1-essentials_build-www.gyan.dev
+[2025-08-16 14:27:48] [SUCCESS] [DOCTOR] OpenAI API connectivity: OK
+[2025-08-16 14:27:48] [SUCCESS] [DOCTOR] Disk space: 54.52 GB available
+[2025-08-16 14:27:48] [SUCCESS] [DOCTOR] Environment check passed
+[2025-08-16 14:27:48] [INFO] [WEB] Initializing web interface...
+[2025-08-16 14:27:48] [SUCCESS] [WEB] Web interface created at: C:\VideoBot\web\index.html
+[2025-08-16 14:27:48] [SUCCESS] [MAIN] 馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee
+[2025-08-16 14:27:48] [INFO] [MAIN] Monitoring directory: C:\VideoBot\in
+[2025-08-16 14:27:48] [INFO] [MAIN] Web interface: http://localhost:8080
+[2025-08-16 14:27:49] [SUCCESS] [WEB] Web server started on port 8080
+[2025-08-16 14:30:29] [INFO] [MAIN] Found 1 video files in queue
+[2025-08-16 14:30:29] [INFO] [MAIN] Queued: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4
+[2025-08-16 14:30:32] [INFO] [MAIN] 馃幀 PROCESSING: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4
+[2025-08-16 14:30:32] [INFO] [PROCESSOR] Starting ultimate processing: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4
+[2025-08-16 14:30:32] [INFO] [PROCESSOR] Video analysis: 720x1280, 0.2min, portrait
+[2025-08-16 14:30:32] [INFO] [SMART] Recommended preset: social (Scene: portrait, Duration: short)
+[2025-08-16 14:30:33] [INFO] [PROCESSOR] Processing with preset: social (绀句氦濯掍綋)
+[2025-08-16 14:30:33] [DEBUG] [PROCESSOR] Command: ffmpeg -i "C:\VideoBot\in\c1b62b1a539d6116ecc2c0ff706c2f1c.mp4" -filter_complex "scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black" -c:v libx264 -preset medium -crf 23 -c:a aac -b:a 128k -movflags +faststart "C:\VideoBot\out\c1b62b1a539d6116ecc2c0ff706c2f1c_social.mp4" -y
+[2025-08-16 14:30:35] [SUCCESS] [PROCESSOR] Video processing completed in 0.0 minutes
+[2025-08-16 14:30:35] [SUCCESS] [PROCESSOR] Size reduction: -37.4% (2MB 鈫?2.7MB)
+[2025-08-16 14:30:35] [INFO] [PROCESSOR] Starting subtitle generation...
+[2025-08-16 14:30:35] [INFO] [AI] Starting AI transcription for: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4
+[2025-08-16 14:30:35] [INFO] [AI] Extracting audio...
+[2025-08-16 14:30:35] [INFO] [AI] Calling OpenAI Whisper API...
+[2025-08-16 14:30:37] [ERROR] [AI] AI transcription failed: 远程服务器返回错误: (401) 未经授权。
+[2025-08-16 14:30:37] [SUCCESS] [MAIN] 鉁?SUCCESS: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4 鈫?c1b62b1a539d6116ecc2c0ff706c2f1c_social.mp4
+[2025-08-16 14:30:37] [INFO] [NOTIFICATION] Video processed successfully: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4
+[2025-08-16 14:35:43] [INFO] [CONFIG] Initializing VideoAgent Ultimate configuration...
+[2025-08-16 14:35:43] [SUCCESS] [CONFIG] Configuration initialized successfully
+[2025-08-16 14:35:43] [INFO] [DOCTOR] Starting comprehensive environment check...
+[2025-08-16 14:35:43] [SUCCESS] [DOCTOR] FFmpeg found: 7.1.1-essentials_build-www.gyan.dev
+[2025-08-16 14:35:46] [SUCCESS] [DOCTOR] OpenAI API connectivity: OK
+[2025-08-16 14:35:46] [WARN] [DOCTOR] Port 8080 is in use, trying alternative...
+[2025-08-16 14:35:47] [SUCCESS] [DOCTOR] Disk space: 54.28 GB available
+[2025-08-16 14:35:47] [SUCCESS] [DOCTOR] Environment check passed
+[2025-08-16 14:35:47] [INFO] [WEB] Initializing web interface...
+[2025-08-16 14:35:47] [SUCCESS] [WEB] Web interface created at: C:\VideoBot\web\index.html
+[2025-08-16 14:35:47] [SUCCESS] [MAIN] 馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee
+[2025-08-16 14:35:47] [INFO] [MAIN] Monitoring directory: C:\VideoBot\in
+[2025-08-16 14:35:47] [INFO] [MAIN] Web interface: http://localhost:8081
+[2025-08-16 14:35:47] [SUCCESS] [WEB] Web server started on port 8081

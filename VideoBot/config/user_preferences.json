@@ -1,0 +1,11 @@
+﻿{
+    "created":  "2025-08-16 14:35:43",
+    "user":  "Quen-Tao-Lee",
+    "version":  "3.0-Ultimate",
+    "preferences":  {
+                        "notifications":  true,
+                        "webInterface":  true,
+                        "defaultPreset":  "mobile",
+                        "autoSubtitles":  true
+                    }
+}

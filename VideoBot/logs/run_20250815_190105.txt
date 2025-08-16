@@ -1,0 +1,8 @@
+==== Start 2025/08/15 周五 19:01:05.49 ====
+
+[INFO] 20250815_190105 处理：C:\VideoBot\in\test.mp4
+[CMD] ffmpeg 开始转码 
+[OK] 输出：C:\VideoBot\out\test_1080x1920.mp4 
+[MOVE] 已移动源文件到 done 
+处理完成，共处理 1 个文件
+==== End 2025/08/15 周五 19:01:12.52 ====

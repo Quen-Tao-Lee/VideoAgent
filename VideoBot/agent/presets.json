@@ -1,0 +1,47 @@
+{
+    "mobile": {
+        "name": "Mobile Vertical",
+        "width": 1080,
+        "height": 1920,
+        "crf": 23,
+        "preset": "medium",
+        "audio_bitrate": "128k",
+        "description": "Optimized for mobile devices and social media"
+    },
+    "desktop": {
+        "name": "Desktop Horizontal", 
+        "width": 1920,
+        "height": 1080,
+        "crf": 20,
+        "preset": "medium",
+        "audio_bitrate": "192k",
+        "description": "High quality for desktop viewing"
+    },
+    "4k": {
+        "name": "4K Ultra HD",
+        "width": 3840,
+        "height": 2160,
+        "crf": 18,
+        "preset": "slow",
+        "audio_bitrate": "256k",
+        "description": "Maximum quality for 4K displays"
+    },
+    "web": {
+        "name": "Web Optimized",
+        "width": 1280,
+        "height": 720,
+        "crf": 25,
+        "preset": "fast",
+        "audio_bitrate": "128k",
+        "description": "Fast loading for web streaming"
+    },
+    "social": {
+        "name": "Social Media",
+        "width": 1080,
+        "height": 1080,
+        "crf": 23,
+        "preset": "medium", 
+        "audio_bitrate": "128k",
+        "description": "Square format for social platforms"
+    }
+}

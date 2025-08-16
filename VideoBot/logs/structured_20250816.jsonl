@@ -1,0 +1,75 @@
+﻿{"component":"CONFIG","timestamp":"2025-08-16 14:03:46","level":"INFO","message":"Initializing VideoAgent Ultimate configuration...","user":"Administrator"}
+{"component":"CONFIG","timestamp":"2025-08-16 14:03:46","level":"SUCCESS","message":"Configuration initialized successfully","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:03:46","level":"INFO","message":"Starting comprehensive environment check...","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:03:46","level":"SUCCESS","message":"FFmpeg found: 7.1.1-essentials_build-www.gyan.dev","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:03:50","level":"SUCCESS","message":"OpenAI API connectivity: OK","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:03:50","level":"SUCCESS","message":"Disk space: 54.5 GB available","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:03:50","level":"SUCCESS","message":"Environment check passed","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:03:50","level":"INFO","message":"Initializing web interface...","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:03:50","level":"SUCCESS","message":"Web interface created at: C:\\VideoBot\\web\\index.html","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:03:50","level":"SUCCESS","message":"馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:03:50","level":"INFO","message":"Monitoring directory: C:\\VideoBot\\in","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:03:50","level":"INFO","message":"Web interface: http://localhost:8080","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:03:51","level":"SUCCESS","message":"Web server started on port 8080","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:06:06","level":"INFO","message":"Found 1 video files in queue","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:06:06","level":"INFO","message":"Queued: wp.mp4","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:06:09","level":"INFO","message":"馃幀 PROCESSING: wp.mp4","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:10","level":"INFO","message":"Starting ultimate processing: wp.mp4","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:10","level":"INFO","message":"Video analysis: 720x1280, 0.2min, portrait","user":"Administrator"}
+{"component":"SMART","timestamp":"2025-08-16 14:06:10","level":"INFO","message":"Recommended preset: social (Scene: portrait, Duration: short)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:10","level":"INFO","message":"Processing with preset: social (绀句氦濯掍綋)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:10","level":"DEBUG","message":"Command: ffmpeg -i \"C:\\VideoBot\\in\\wp.mp4\" -filter_complex \"scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black\" -c:v libx264 -preset medium -crf 23 -c:a aac -b:a 128k -movflags +faststart \"C:\\VideoBot\\out\\wp_social.mp4\" -y","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:12","level":"SUCCESS","message":"Video processing completed in 0.0 minutes","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:12","level":"SUCCESS","message":"Size reduction: -37.4% (2MB 鈫?2.7MB)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:06:12","level":"INFO","message":"Starting subtitle generation...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:06:12","level":"INFO","message":"Starting AI transcription for: wp.mp4","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:06:12","level":"INFO","message":"Extracting audio...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:06:12","level":"INFO","message":"Calling OpenAI Whisper API...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:06:14","level":"ERROR","message":"AI transcription failed: 远程服务器返回错误: (401) 未经授权。","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:06:14","level":"SUCCESS","message":"鉁?SUCCESS: wp.mp4 鈫?wp_social.mp4","user":"Administrator"}
+{"component":"NOTIFICATION","timestamp":"2025-08-16 14:06:14","level":"INFO","message":"Video processed successfully: wp.mp4","user":"Administrator"}
+{"component":"HEARTBEAT","timestamp":"2025-08-16 14:20:00","level":"INFO","message":"馃挀 HEARTBEAT: Running for 0.3 hours, processed 1 videos","user":"Administrator"}
+{"component":"CONFIG","timestamp":"2025-08-16 14:27:44","level":"INFO","message":"Initializing VideoAgent Ultimate configuration...","user":"Administrator"}
+{"component":"CONFIG","timestamp":"2025-08-16 14:27:44","level":"SUCCESS","message":"Configuration initialized successfully","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:27:44","level":"INFO","message":"Starting comprehensive environment check...","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:27:44","level":"SUCCESS","message":"FFmpeg found: 7.1.1-essentials_build-www.gyan.dev","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:27:48","level":"SUCCESS","message":"OpenAI API connectivity: OK","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:27:48","level":"SUCCESS","message":"Disk space: 54.52 GB available","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:27:48","level":"SUCCESS","message":"Environment check passed","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:27:48","level":"INFO","message":"Initializing web interface...","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:27:48","level":"SUCCESS","message":"Web interface created at: C:\\VideoBot\\web\\index.html","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:27:48","level":"SUCCESS","message":"馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:27:48","level":"INFO","message":"Monitoring directory: C:\\VideoBot\\in","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:27:48","level":"INFO","message":"Web interface: http://localhost:8080","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:27:49","level":"SUCCESS","message":"Web server started on port 8080","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:30:29","level":"INFO","message":"Found 1 video files in queue","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:30:29","level":"INFO","message":"Queued: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:30:32","level":"INFO","message":"馃幀 PROCESSING: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:32","level":"INFO","message":"Starting ultimate processing: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:32","level":"INFO","message":"Video analysis: 720x1280, 0.2min, portrait","user":"Administrator"}
+{"component":"SMART","timestamp":"2025-08-16 14:30:32","level":"INFO","message":"Recommended preset: social (Scene: portrait, Duration: short)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:33","level":"INFO","message":"Processing with preset: social (绀句氦濯掍綋)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:33","level":"DEBUG","message":"Command: ffmpeg -i \"C:\\VideoBot\\in\\c1b62b1a539d6116ecc2c0ff706c2f1c.mp4\" -filter_complex \"scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black\" -c:v libx264 -preset medium -crf 23 -c:a aac -b:a 128k -movflags +faststart \"C:\\VideoBot\\out\\c1b62b1a539d6116ecc2c0ff706c2f1c_social.mp4\" -y","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:35","level":"SUCCESS","message":"Video processing completed in 0.0 minutes","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:35","level":"SUCCESS","message":"Size reduction: -37.4% (2MB 鈫?2.7MB)","user":"Administrator"}
+{"component":"PROCESSOR","timestamp":"2025-08-16 14:30:35","level":"INFO","message":"Starting subtitle generation...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:30:35","level":"INFO","message":"Starting AI transcription for: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:30:35","level":"INFO","message":"Extracting audio...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:30:35","level":"INFO","message":"Calling OpenAI Whisper API...","user":"Administrator"}
+{"component":"AI","timestamp":"2025-08-16 14:30:37","level":"ERROR","message":"AI transcription failed: 远程服务器返回错误: (401) 未经授权。","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:30:37","level":"SUCCESS","message":"鉁?SUCCESS: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4 鈫?c1b62b1a539d6116ecc2c0ff706c2f1c_social.mp4","user":"Administrator"}
+{"component":"NOTIFICATION","timestamp":"2025-08-16 14:30:37","level":"INFO","message":"Video processed successfully: c1b62b1a539d6116ecc2c0ff706c2f1c.mp4","user":"Administrator"}
+{"component":"CONFIG","timestamp":"2025-08-16 14:35:43","level":"INFO","message":"Initializing VideoAgent Ultimate configuration...","user":"Administrator"}
+{"component":"CONFIG","timestamp":"2025-08-16 14:35:43","level":"SUCCESS","message":"Configuration initialized successfully","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:43","level":"INFO","message":"Starting comprehensive environment check...","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:43","level":"SUCCESS","message":"FFmpeg found: 7.1.1-essentials_build-www.gyan.dev","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:46","level":"SUCCESS","message":"OpenAI API connectivity: OK","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:46","level":"WARN","message":"Port 8080 is in use, trying alternative...","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:47","level":"SUCCESS","message":"Disk space: 54.28 GB available","user":"Administrator"}
+{"component":"DOCTOR","timestamp":"2025-08-16 14:35:47","level":"SUCCESS","message":"Environment check passed","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:35:47","level":"INFO","message":"Initializing web interface...","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:35:47","level":"SUCCESS","message":"Web interface created at: C:\\VideoBot\\web\\index.html","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:35:47","level":"SUCCESS","message":"馃殌 VideoAgent Ultimate started by user: Quen-Tao-Lee","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:35:47","level":"INFO","message":"Monitoring directory: C:\\VideoBot\\in","user":"Administrator"}
+{"component":"MAIN","timestamp":"2025-08-16 14:35:47","level":"INFO","message":"Web interface: http://localhost:8081","user":"Administrator"}
+{"component":"WEB","timestamp":"2025-08-16 14:35:47","level":"SUCCESS","message":"Web server started on port 8081","user":"Administrator"}
