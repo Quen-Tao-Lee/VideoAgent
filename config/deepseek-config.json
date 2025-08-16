@@ -1,0 +1,85 @@
+{
+    "DeepSeek": {
+        "API": {
+            "BaseURL": "https://api.deepseek.com",
+            "Version": "v1",
+            "Endpoints": {
+                "Chat": "/chat/completions",
+                "Audio": "/audio/transcriptions",
+                "Models": "/models"
+            },
+            "Timeout": 300,
+            "MaxRetries": 3,
+            "RetryDelay": 2
+        },
+        "Authentication": {
+            "Type": "Bearer",
+            "KeySource": "Environment",
+            "EnvironmentVariable": "DEEPSEEK_API_KEY",
+            "KeyFile": "./config/.deepseek_key"
+        },
+        "Models": {
+            "Chat": {
+                "Primary": "deepseek-chat",
+                "Fallback": "deepseek-coder",
+                "MaxTokens": 4096,
+                "Temperature": 0.7,
+                "TopP": 0.9
+            },
+            "Audio": {
+                "Primary": "whisper-1",
+                "Language": "auto",
+                "ResponseFormat": "srt",
+                "MaxFileSize": 26214400
+            }
+        },
+        "CostOptimization": {
+            "EnableCostTracking": true,
+            "MaxDailyCost": 10.00,
+            "MaxMonthlyCost": 100.00,
+            "AlertThreshold": 0.8,
+            "BatchProcessing": true,
+            "CacheResults": true,
+            "CacheDuration": 86400
+        },
+        "RateLimiting": {
+            "RequestsPerMinute": 60,
+            "RequestsPerHour": 1000,
+            "RequestsPerDay": 10000,
+            "ConcurrentRequests": 5,
+            "BackoffStrategy": "exponential"
+        },
+        "PromptTemplates": {
+            "VideoAnalysis": {
+                "System": "You are an expert video content analyst. Analyze the provided video content and provide insights about its quality, content type, and potential improvements.",
+                "User": "Analyze this video content: {content}. Provide analysis for: 1) Content type and category, 2) Quality assessment, 3) Suggested improvements, 4) Target audience."
+            },
+            "SubtitleGeneration": {
+                "System": "You are a professional subtitle generator. Create accurate, well-timed subtitles that are easy to read and properly formatted.",
+                "User": "Generate subtitles for this audio content. Ensure proper timing, punctuation, and readability."
+            },
+            "MarketingCopy": {
+                "System": "You are a marketing copywriter specialized in video content. Create compelling, engaging copy that drives audience engagement.",
+                "User": "Create marketing copy for this video: {title}. Content summary: {summary}. Target platform: {platform}. Include: 1) Catchy title, 2) Description, 3) Tags/hashtags, 4) Call-to-action."
+            },
+            "ContentSummary": {
+                "System": "You are a content summarization expert. Create concise, accurate summaries that capture the key points and value of video content.",
+                "User": "Summarize this video content in 2-3 sentences: {content}. Focus on the main topic, key points, and value proposition."
+            }
+        },
+        "QualitySettings": {
+            "MinConfidenceScore": 0.8,
+            "MaxResponseTime": 30,
+            "ValidateResponses": true,
+            "FallbackToCache": true,
+            "EnableContentFiltering": true
+        },
+        "Pricing": {
+            "InputTokenCost": 0.000014,
+            "OutputTokenCost": 0.000028,
+            "AudioPerMinute": 0.006,
+            "EstimatedSavings": 0.95,
+            "Currency": "USD"
+        }
+    }
+}

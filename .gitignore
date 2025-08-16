@@ -1,0 +1,113 @@
+# VideoAgent .gitignore
+# Ignore temporary files, logs, and sensitive data
+
+# Directories
+temp/
+logs/
+input/
+output/
+processed/
+error/
+
+# Temporary files
+*.tmp
+*.temp
+*_temp_*
+audio_*.wav
+audio_*.mp3
+video_temp_*
+
+# API Keys and Secrets
+.deepseek_key
+*.key
+api_key.txt
+secrets.json
+
+# Log files
+*.log
+videoagent_*.log
+doctor_*.log
+
+# FFmpeg output
+ffmpeg2pass-*
+*.ffindex
+
+# PowerShell specific
+*.ps1xml
+$RECYCLE.BIN/
+
+# Video files (typically large)
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.wmv
+*.m4v
+*.flv
+
+# Audio files
+*.wav
+*.mp3
+*.aac
+*.flac
+*.ogg
+
+# Subtitle files (generated)
+*.srt
+*.vtt
+*.ass
+*.ssa
+
+# Analysis outputs
+*.analysis.json
+*.marketing.txt
+*.summary.txt
+
+# Cache files
+cache/
+*.cache
+
+# Backup files
+*.bak
+*.backup
+*_backup.*
+
+# OS specific
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Development
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Config overrides (but keep templates)
+config/local_*
+config/production_*
+config/dev_*
+
+# Keep templates and examples
+!config/config.json
+!config/deepseek-config.json
+!examples/
+!docs/

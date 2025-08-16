@@ -1,0 +1,88 @@
+{
+    "VideoAgent": {
+        "Version": "2.0.0",
+        "Name": "VideoAgent with DeepSeek AI",
+        "Description": "Intelligent video processing with cost-effective AI capabilities"
+    },
+    "Directories": {
+        "Input": "./input",
+        "Output": "./output", 
+        "Temp": "./temp",
+        "Logs": "./logs",
+        "Config": "./config",
+        "Modules": "./modules"
+    },
+    "VideoProcessing": {
+        "SupportedFormats": ["mp4", "mov", "mkv", "m4v", "avi", "wmv"],
+        "DefaultOutputFormat": "mp4",
+        "MaxFileSize": 2147483648,
+        "DefaultPreset": "balanced",
+        "Presets": {
+            "fast": {
+                "Description": "Fast processing for quick results",
+                "CRF": 28,
+                "Preset": "ultrafast",
+                "MaxWidth": 1280,
+                "MaxHeight": 720
+            },
+            "balanced": {
+                "Description": "Balanced quality and speed",
+                "CRF": 23,
+                "Preset": "medium",
+                "MaxWidth": 1920,
+                "MaxHeight": 1080
+            },
+            "quality": {
+                "Description": "High quality for best results",
+                "CRF": 18,
+                "Preset": "slow",
+                "MaxWidth": 3840,
+                "MaxHeight": 2160
+            },
+            "social": {
+                "Description": "Optimized for social media",
+                "CRF": 25,
+                "Preset": "fast",
+                "MaxWidth": 1080,
+                "MaxHeight": 1920
+            }
+        }
+    },
+    "Audio": {
+        "DefaultSampleRate": 16000,
+        "DefaultChannels": 1,
+        "MaxAudioSize": 26214400,
+        "CompressionBitrate": "64k",
+        "SupportedFormats": ["wav", "mp3", "aac", "flac"]
+    },
+    "Subtitles": {
+        "DefaultLanguage": "auto",
+        "OutputFormat": "srt",
+        "FontFamily": "Arial",
+        "FontSize": 24,
+        "FontColor": "white",
+        "BackgroundColor": "black",
+        "Opacity": 0.8
+    },
+    "Logging": {
+        "Level": "INFO",
+        "MaxLogFileSize": 10485760,
+        "MaxLogFiles": 10,
+        "ConsoleOutput": true,
+        "FileOutput": true,
+        "DateFormat": "yyyy-MM-dd HH:mm:ss"
+    },
+    "Performance": {
+        "MaxConcurrentJobs": 2,
+        "MemoryThreshold": 85,
+        "DiskSpaceThreshold": 90,
+        "ProcessTimeout": 7200
+    },
+    "Features": {
+        "AutoSubtitles": true,
+        "ContentAnalysis": true,
+        "MarketingCopy": false,
+        "CostTracking": true,
+        "QualityAssurance": true
+    }
+}
