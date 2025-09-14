@@ -10,15 +10,17 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 
 # 添加项目根目录到Python路径
-sys.path.append(str(Path(__file__).parent.parent))
+current_dir = Path(__file__).parent
+sys.path.append(str(current_dir))
+sys.path.append(str(current_dir.parent))
 
-from .config.settings import CrawlerConfig
-from .config.database_config import DatabaseConfig
-from .database.manager import DatabaseManager
-from .utils.logger import setup_logger
-from .ecommerce.spiders.taobao_spider import TaobaoSpider
-from .analysis.sentiment_analyzer import SentimentAnalyzer
-from .analysis.data_visualizer import DataVisualizer
+from config.settings import CrawlerConfig
+from config.database_config import DatabaseConfig
+from database.manager import DatabaseManager
+from utils.logger import setup_logger
+from ecommerce.spiders.taobao_spider import TaobaoSpider
+from analysis.sentiment_analyzer import SentimentAnalyzer
+from analysis.data_visualizer import DataVisualizer
 
 
 class CrawlerSystem:

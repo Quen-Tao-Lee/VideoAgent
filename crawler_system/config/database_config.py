@@ -129,8 +129,18 @@ class DatabaseConfig:
         if self.engine is None:
             self.create_engine()
         
-        # 导入所有模型以确保它们被注册
-        from ..database.models import *
+        # 导入所有模型以确保它们被注册到Base.metadata
+        try:
+            import database.models as models
+            # 确保所有模型被导入
+            self.base = models.Base
+        except ImportError:
+            # 如果相对导入失败，使用绝对导入
+            import sys
+            import os
+            sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+            import database.models as models
+            self.base = models.Base
         
         # 创建所有表
         self.base.metadata.create_all(self.engine)

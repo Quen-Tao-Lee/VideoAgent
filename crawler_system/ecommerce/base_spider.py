@@ -8,11 +8,11 @@ import random
 from typing import Dict, Any, Optional, List
 from urllib.parse import urljoin, urlparse
 
-from ..utils.logger import LoggerMixin
-from ..utils.rate_limiter import RateLimiter, AdaptiveRateLimiter
-from ..utils.user_agent import UserAgentRotator
-from ..utils.proxy_manager import ProxyManager
-from ..config.settings import CrawlerConfig
+from utils.logger import LoggerMixin
+from utils.rate_limiter import RateLimiter, AdaptiveRateLimiter
+from utils.user_agent import UserAgentRotator
+from utils.proxy_manager import ProxyManager
+from config.settings import CrawlerConfig
 from .items import EcommerceItem
 
 

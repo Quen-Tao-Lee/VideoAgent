@@ -8,8 +8,8 @@ import re
 from urllib.parse import urljoin, quote
 from typing import Generator, Dict, Any
 
-from ..base_spider import BaseEcommerceSpider
-from ..items import EcommerceItem
+from ecommerce.base_spider import BaseEcommerceSpider
+from ecommerce.items import EcommerceItem
 
 
 class TaobaoSpider(BaseEcommerceSpider):

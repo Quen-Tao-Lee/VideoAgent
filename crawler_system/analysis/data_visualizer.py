@@ -8,7 +8,7 @@ matplotlib.use('Agg')  # 使用非交互式后端
 import matplotlib.pyplot as plt
 import pandas as pd
 from typing import Dict, Any, List, Optional
-from ..utils.logger import LoggerMixin
+from utils.logger import LoggerMixin
 
 
 class DataVisualizer(LoggerMixin):

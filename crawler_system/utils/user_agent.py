@@ -5,7 +5,12 @@ User Agent Rotation Utility
 
 import random
 from typing import List
-from fake_useragent import UserAgent
+
+try:
+    from fake_useragent import UserAgent
+    HAS_FAKE_UA = True
+except ImportError:
+    HAS_FAKE_UA = False
 
 
 class UserAgentRotator:
@@ -25,11 +30,13 @@ class UserAgentRotator:
         self.use_external = use_external
         self.ua_generator = None
         
-        if use_external:
+        if use_external and HAS_FAKE_UA:
             try:
                 self.ua_generator = UserAgent()
             except Exception:
                 self.use_external = False
+        else:
+            self.use_external = False
         
         # 备用用户代理列表
         self.backup_agents = [

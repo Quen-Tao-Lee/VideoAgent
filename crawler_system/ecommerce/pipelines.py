@@ -9,10 +9,10 @@ from typing import Dict, Any
 from scrapy import Spider
 from scrapy.exceptions import DropItem
 
-from ..database.manager import DatabaseManager
-from ..config.database_config import DatabaseConfig
-from ..utils.logger import LoggerMixin
-from ..utils.text_processor import TextProcessor
+from database.manager import DatabaseManager
+from config.database_config import DatabaseConfig
+from utils.logger import LoggerMixin
+from utils.text_processor import TextProcessor
 
 
 class EcommercePipeline(LoggerMixin):

@@ -12,7 +12,7 @@ from .models import (
     Base, EcommerceProduct, SocialMediaPost, CrawlLog, 
     PriceHistory, SentimentAnalysis
 )
-from ..config.database_config import DatabaseConfig
+from config.database_config import DatabaseConfig
 
 
 class DatabaseManager:

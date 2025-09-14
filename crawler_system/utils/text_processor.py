@@ -4,9 +4,20 @@ Text Processing Utility
 """
 
 import re
-import jieba
 from typing import List, Dict, Any
-from snownlp import SnowNLP
+
+try:
+    import jieba
+    import jieba.analyse
+    HAS_JIEBA = True
+except ImportError:
+    HAS_JIEBA = False
+
+try:
+    from snownlp import SnowNLP
+    HAS_SNOWNLP = True
+except ImportError:
+    HAS_SNOWNLP = False
 
 
 class TextProcessor:
@@ -18,7 +29,8 @@ class TextProcessor:
     def __init__(self):
         """初始化文本处理器 / Initialize text processor"""
         # 初始化jieba分词
-        jieba.initialize()
+        if HAS_JIEBA:
+            jieba.initialize()
         
         # 常用停用词
         self.stop_words = {
@@ -65,6 +77,9 @@ class TextProcessor:
         if not text:
             return []
         
+        if not HAS_JIEBA:
+            return []
+        
         # 清理文本
         cleaned_text = self.clean_text(text)
         
@@ -97,6 +112,10 @@ class TextProcessor:
         """
         if not text:
             return []
+        
+        if not HAS_JIEBA:
+            # 简单的空格分词作为后备
+            return text.split()
         
         # 清理文本
         cleaned_text = self.clean_text(text)
@@ -133,6 +152,10 @@ class TextProcessor:
                 'confidence': 0.0
             }
         
+        if not HAS_SNOWNLP:
+            # 简单的规则方法作为后备
+            return self._simple_sentiment_analysis(text)
+        
         try:
             # 使用SnowNLP进行情感分析
             s = SnowNLP(text)
@@ -164,6 +187,46 @@ class TextProcessor:
                 'label': 'neutral',
                 'confidence': 0.0,
                 'error': str(e)
+            }
+    
+    def _simple_sentiment_analysis(self, text: str) -> Dict[str, Any]:
+        """
+        简单的情感分析方法（后备）
+        Simple sentiment analysis method (fallback)
+        """
+        positive_words = ['好', '很好', '优秀', '棒', '赞', '喜欢', 'good', 'great', 'excellent']
+        negative_words = ['坏', '差', '糟糕', '不好', '讨厌', 'bad', 'terrible', 'awful']
+        
+        text_lower = text.lower()
+        positive_count = sum(1 for word in positive_words if word in text_lower)
+        negative_count = sum(1 for word in negative_words if word in text_lower)
+        
+        if positive_count > negative_count:
+            return {
+                'score': 0.7,
+                'label': 'positive',
+                'confidence': 0.6,
+                'positive_score': 0.7,
+                'negative_score': 0.3,
+                'neutral_score': 0.0
+            }
+        elif negative_count > positive_count:
+            return {
+                'score': 0.3,
+                'label': 'negative', 
+                'confidence': 0.6,
+                'positive_score': 0.3,
+                'negative_score': 0.7,
+                'neutral_score': 0.0
+            }
+        else:
+            return {
+                'score': 0.5,
+                'label': 'neutral',
+                'confidence': 0.5,
+                'positive_score': 0.5,
+                'negative_score': 0.5,
+                'neutral_score': 1.0
             }
     
     def extract_price(self, text: str) -> List[float]:

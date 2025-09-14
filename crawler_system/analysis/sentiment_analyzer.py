@@ -4,8 +4,8 @@ Sentiment Analyzer
 """
 
 from typing import Dict, Any, List
-from ..utils.text_processor import TextProcessor
-from ..utils.logger import LoggerMixin
+from utils.text_processor import TextProcessor
+from utils.logger import LoggerMixin
 
 
 class SentimentAnalyzer(LoggerMixin):
