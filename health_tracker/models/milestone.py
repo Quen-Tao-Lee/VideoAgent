@@ -3,10 +3,9 @@ Milestone tracking model
 """
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean, ForeignKey, Enum
-from sqlalchemy.ext.declarative import declarative_base
 import enum
 
-Base = declarative_base()
+from health_tracker.models.base import Base
 
 
 class MilestoneType(enum.Enum):

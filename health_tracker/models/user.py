@@ -4,9 +4,8 @@ User model for health tracking system
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from health_tracker.models.base import Base
 
 
 class User(Base):

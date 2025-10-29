@@ -5,14 +5,12 @@ from typing import Optional, List
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine, and_, or_
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.ext.declarative import declarative_base
 
+from health_tracker.models.base import Base
 from health_tracker.models import (
     User, DailyCheckIn, Milestone, SafetyAlert,
     MilestoneStatus, AlertSeverity
 )
-
-Base = declarative_base()
 
 
 class DatabaseManager:
@@ -30,15 +28,8 @@ class DatabaseManager:
         
     def create_tables(self):
         """创建所有表"""
-        from health_tracker.models.user import Base as UserBase
-        from health_tracker.models.daily_checkin import Base as CheckInBase
-        from health_tracker.models.milestone import Base as MilestoneBase
-        from health_tracker.models.safety_alert import Base as AlertBase
-        
-        UserBase.metadata.create_all(self.engine)
-        CheckInBase.metadata.create_all(self.engine)
-        MilestoneBase.metadata.create_all(self.engine)
-        AlertBase.metadata.create_all(self.engine)
+        # 使用统一的Base来创建所有表
+        Base.metadata.create_all(self.engine)
         
     def get_session(self) -> Session:
         """获取数据库会话"""

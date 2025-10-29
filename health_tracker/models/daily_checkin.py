@@ -4,9 +4,8 @@ Daily check-in model for health tracking
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from health_tracker.models.base import Base
 
 
 class DailyCheckIn(Base):
