@@ -1,0 +1,25 @@
+# Health Tracker Mini-Program Dependencies
+
+# Core Framework
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Date and Time
+python-dateutil>=2.8.0
+
+# For API documentation (optional)
+flasgger>=0.9.7
+
+# Testing
+pytest>=7.4.0
+pytest-flask>=1.2.0
+
+# Development
+python-dotenv>=1.0.0
