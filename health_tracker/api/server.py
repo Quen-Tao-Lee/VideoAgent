@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 from typing import Dict, Optional
 import traceback
+import os
 
 from health_tracker.utils.database import DatabaseManager
 from health_tracker.analysis.auto_correction import AutoCorrectionAlgorithm
@@ -27,8 +28,33 @@ class HealthTrackerAPI:
         self.db_manager = DatabaseManager(db_url)
         self.db_manager.create_tables()
         
+        # 获取调试模式设置
+        self.debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true' or self.app.debug
+        
         # 注册路由
         self._register_routes()
+    
+    def _error_response(self, error: Exception, status_code: int = 400):
+        """
+        创建安全的错误响应
+        
+        Args:
+            error: 异常对象
+            status_code: HTTP状态码
+            
+        Returns:
+            JSON响应和状态码
+        """
+        response = {
+            'success': False,
+            'error': str(error)
+        }
+        
+        # 仅在调试模式下包含详细的traceback
+        if self.debug_mode:
+            response['traceback'] = traceback.format_exc()
+        
+        return jsonify(response), status_code
     
     def _register_routes(self):
         """注册所有API路由"""
@@ -77,11 +103,7 @@ class HealthTrackerAPI:
                 'data': user.to_dict()
             }), 201
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_user(self, user_id: int):
         """获取用户信息"""
@@ -98,10 +120,7 @@ class HealthTrackerAPI:
                 'data': user.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def update_user(self, user_id: int):
         """更新用户信息"""
@@ -119,10 +138,7 @@ class HealthTrackerAPI:
                 'data': user.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     # ==================== 每日打卡 ====================
     
@@ -145,11 +161,7 @@ class HealthTrackerAPI:
                 'data': checkin.to_dict()
             }), 201
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_checkin(self, checkin_id: int):
         """获取打卡记录"""
@@ -166,10 +178,7 @@ class HealthTrackerAPI:
                 'data': checkin.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def update_checkin(self, checkin_id: int):
         """更新打卡记录"""
@@ -190,10 +199,7 @@ class HealthTrackerAPI:
                 'data': checkin.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def get_user_checkins(self, user_id: int):
         """获取用户的所有打卡记录"""
@@ -214,10 +220,7 @@ class HealthTrackerAPI:
                 'count': len(checkins)
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     # ==================== 里程碑管理 ====================
     
@@ -237,11 +240,7 @@ class HealthTrackerAPI:
                 'data': milestone.to_dict()
             }), 201
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_milestone(self, milestone_id: int):
         """获取里程碑"""
@@ -258,10 +257,7 @@ class HealthTrackerAPI:
                 'data': milestone.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def update_milestone(self, milestone_id: int):
         """更新里程碑"""
@@ -279,10 +275,7 @@ class HealthTrackerAPI:
                 'data': milestone.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def get_user_milestones(self, user_id: int):
         """获取用户的所有里程碑"""
@@ -296,10 +289,7 @@ class HealthTrackerAPI:
                 'count': len(milestones)
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     # ==================== 安全警报 ====================
     
@@ -314,11 +304,7 @@ class HealthTrackerAPI:
                 'data': alert.to_dict()
             }), 201
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_alert(self, alert_id: int):
         """获取警报"""
@@ -335,10 +321,7 @@ class HealthTrackerAPI:
                 'data': alert.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def mark_alert_read(self, alert_id: int):
         """标记警报为已读"""
@@ -355,10 +338,7 @@ class HealthTrackerAPI:
                 'data': alert.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def resolve_alert(self, alert_id: int):
         """解决警报"""
@@ -378,10 +358,7 @@ class HealthTrackerAPI:
                 'data': alert.to_dict()
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     def get_user_alerts(self, user_id: int):
         """获取用户的所有警报"""
@@ -403,10 +380,7 @@ class HealthTrackerAPI:
                 'count': len(alerts)
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 400
+            return self._error_response(e, 400)
     
     # ==================== 分析和报告 ====================
     
@@ -453,11 +427,7 @@ class HealthTrackerAPI:
                 }
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_weekly_report(self, user_id: int):
         """获取周度报告"""
@@ -537,11 +507,7 @@ class HealthTrackerAPI:
                 }
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     def get_milestone_report(self, user_id: int, milestone_id: int):
         """获取里程碑报告"""
@@ -625,11 +591,7 @@ class HealthTrackerAPI:
                 }
             })
         except Exception as e:
-            return jsonify({
-                'success': False,
-                'error': str(e),
-                'traceback': traceback.format_exc()
-            }), 400
+            return self._error_response(e, 400)
     
     # ==================== 辅助方法 ====================
     
