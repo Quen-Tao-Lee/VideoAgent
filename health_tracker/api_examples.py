@@ -7,7 +7,7 @@ using the requests library.
 """
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # API base URL
 BASE_URL = "http://localhost:5000/api"
@@ -31,6 +31,10 @@ def example_create_user():
     """示例：创建用户"""
     print("\n1. 创建用户")
     
+    # 使用相对日期，更具通用性
+    baseline_date = (datetime.now() - timedelta(days=38)).isoformat()  # 38天前作为基线
+    target_date = (datetime.now() + timedelta(days=102)).isoformat()    # 102天后作为目标
+    
     user_data = {
         "username": "api_demo_user",
         "nickname": "API演示用户",
@@ -38,11 +42,11 @@ def example_create_user():
         "baseline_height": 178.0,
         "baseline_waist": 95.0,
         "baseline_body_fat": 28.0,
-        "baseline_date": "2025-09-21T00:00:00",
+        "baseline_date": baseline_date,
         "target_weight": 75.0,
         "target_waist": 82.0,
         "target_body_fat": 13.5,
-        "target_date": "2026-02-08T00:00:00",
+        "target_date": target_date,
         "age": 29,
         "gender": "male",
         "eating_window_start": "08:00",
@@ -130,12 +134,15 @@ def example_create_milestone(user_id):
     """示例：创建里程碑"""
     print("\n7. 创建里程碑")
     
+    # 使用相对日期 - 2周后的里程碑
+    target_date = (datetime.now() + timedelta(weeks=2)).isoformat()
+    
     milestone_data = {
         "user_id": user_id,
         "name": "W2里程碑",
         "milestone_type": "weekly",
         "week_number": 2,
-        "target_date": "2025-10-05T00:00:00",
+        "target_date": target_date,
         "target_weight": 88.5,
         "target_weight_loss": 1.5,
         "description": "第2周目标：体重总降≥1.0-1.6 kg",
