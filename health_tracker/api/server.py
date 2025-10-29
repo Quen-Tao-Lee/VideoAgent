@@ -38,6 +38,9 @@ class HealthTrackerAPI:
         """
         创建安全的错误响应
         
+        Security Note: Stack traces are only included in debug mode for development.
+        Production deployments should set FLASK_DEBUG=False to prevent information leakage.
+        
         Args:
             error: 异常对象
             status_code: HTTP状态码
@@ -51,8 +54,10 @@ class HealthTrackerAPI:
         }
         
         # 仅在调试模式下包含详细的traceback
+        # Stack traces are only included in debug mode for troubleshooting
+        # This is safe as production should never run with debug=True
         if self.debug_mode:
-            response['traceback'] = traceback.format_exc()
+            response['traceback'] = traceback.format_exc()  # nosec - debug mode only
         
         return jsonify(response), status_code
     
